@@ -1,5 +1,4 @@
-const express = require('express');
-const app = express();
+
 
 /*app.get('/', (req, res) => {
     res.send("Requisição recebida!")
@@ -20,6 +19,8 @@ app.get('/ME', (req, res) => { --colcar /me/pedro/fortaleza
     const {nome, cidade} = req.query;
     res.send(`Meu nome é ${nome}, moro em ${cidade}`);
 })*/
+const express = require('express');
+const app = express();
 
 app.get('/ME/:nome/:cidade', (req, res) => { 
     const {nome, cidade} = req.params;
