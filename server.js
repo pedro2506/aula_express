@@ -26,6 +26,6 @@ app.get('/ME', (req, res) => { --colcar /me/pedro/fortaleza
 })
 
 
-app.listen(1234, () => {
+app.listen(3000, () => {
     console.log("Servidor iniciado na porta 1234");
 });
