@@ -24,7 +24,7 @@ app.get('/ME', (req, res) => { --colcar /me/pedro/fortaleza
 app.get('/ME/:nome/:cidade', (req, res) => { 
     const {nome, cidade} = req.params;
     res.send(`Meu nome é ${nome}, moro em ${cidade}`);
-})
+});
 
 
 app.listen(2000, () => {
