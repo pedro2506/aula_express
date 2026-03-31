@@ -9,6 +9,6 @@ app.get('/ME/:nome/:cidade', (req, res) => {
 });
 
 // O listen mantém o processo do Node vivo
-app.listen(2000, () => {
+app.listen(3000, () => {
     console.log("Servidor iniciado na porta 2000");
 });
