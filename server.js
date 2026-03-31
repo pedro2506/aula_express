@@ -1,6 +1,7 @@
 
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 3000;
 /*app.use(express.static(path.join(__dirname, 'publico')));
 app.get ('/', (req, res) => {
     res.send('Requisição recebida!');
@@ -39,6 +40,6 @@ app.get('/ME/:nome/:cidade', (req, res) => {
     });
 
 // O listen mantém o processo do Node vivo
-app.listen(3000, () => {
-    console.log("Servidor iniciado na porta 3000");
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
