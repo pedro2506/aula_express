@@ -10,6 +10,16 @@ app.get('/', (req, res) => {
 
 app.use(UserRoutes);
 
-app.listen(1234, () => {
-    console.log('Servidor iniciado na porta 1234');
+const PORT = process.env.PORT || 1234;
+
+const server = app.listen(PORT, () => {
+    console.log(`Servidor iniciado na porta ${PORT}`);
+});
+
+server.on('error', (err) => {
+    if (err && err.code === 'EADDRINUSE') {
+        console.error(`Porta ${PORT} em uso. Finalize o processo que a usa ou altere a porta.`);
+        process.exit(1);
+    }
+    throw err;
 });
