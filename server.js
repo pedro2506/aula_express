@@ -1,13 +1,10 @@
 const express = require('express');
+const UserRoutes = require('./src/routes/UserRoutes')
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send("Requisição recebida!")
-});
+app.use(express.json());
 
-app.get('/home', (req, res) => {
-    res.send("Home Page");
-});
+app.use(UserRoutes);
 
 
 app.listen(1234, () => {
