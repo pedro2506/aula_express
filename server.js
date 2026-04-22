@@ -1,44 +1,21 @@
 const express = require('express');
-const router = express.Router();
+const UserRoutes = require('./src/routes/UserRoutes');
 
-// Fake database
-let users = [
-  { id: 1, name: "Joselito", email: "joselito@mail.com" }
-];
+const app = express();
+app.use(express.json());
 
-// POST - criar usuário com ID
-router.post('/users', (req, res) => {
-  const { id, name, email } = req.body;
+app.use(UserRoutes);
 
-  if (typeof id !== 'number') {
-    return res.status(400).json({ error: 'ID precisa ser numérico' });
-  }
+const PORT = process.env.PORT || 1234;
 
-  users.push({ id, name, email });
-
-  return res.status(201).json(users);
+const server = app.listen(PORT, () => {
+  console.log(`Servidor iniciado na porta ${PORT}`);
 });
 
-// PUT - atualizar usuário existente
-router.put('/users/:id', (req, res) => {
-  const id = Number(req.params.id);
-
-  if (isNaN(id)) {
-    return res.status(400).json({ error: 'ID precisa ser numérico' });
+server.on('error', (err) => {
+  if (err && err.code === 'EADDRINUSE') {
+    console.error(`Porta ${PORT} em uso. Finalize o processo que a usa ou altere a porta.`);
+    process.exit(1);
   }
-
-  const user = users.find(u => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuário não encontrado' });
-  }
-
-  // Atualiza apenas os campos enviados
-  Object.keys(req.body).forEach(key => {
-    user[key] = req.body[key];
-  });
-
-  return res.json(user);
+  throw err;
 });
-
-module.exports = router;
