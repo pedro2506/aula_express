@@ -29,7 +29,26 @@ function CreateUser(req, res) {
     return res.status(201).json(newUser);
 }
 
+function UpdateUser(req, res) {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+        return res.status(400).json({ error: 'ID precisa ser numerico' });
+    }
+
+    const user = fakeUsers.find(u => u.id === id);
+    if (!user) {
+        return res.status(404).json({ error: 'Usuario nao encontrado' });
+    }
+
+    const { name, email } = req.body;
+    if (name !== undefined) user.name = name;
+    if (email !== undefined) user.email = email;
+
+    return res.status(200).json(user);
+}
+
 module.exports = {
     ListUser,
-    CreateUser
+    CreateUser,
+    UpdateUser
 };
