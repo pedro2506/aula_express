@@ -14,28 +14,22 @@
  */
 
 const fakeUsers = [
-    {name: "Joselito", email: 'joselito@mail.com'}
+    { id: 1, name: 'Joselito', email: 'joselito@mail.com' }
 ];
 
-async function ListUser(req, res) {
-    res.status(200)
-    const response = await fetch('https://http.dog/200.jpg');
-    const imagem = await response.text()
-    const headers = new Map;
-    headers.set('Content-type', "image/jpg")
-    res.setHeaders(headers);
-    res.send(Buffer.from(imagem));
+function ListUser(req, res) {
+    return res.status(200).json(fakeUsers);
 }
 
 function CreateUser(req, res) {
-    const {name, email} = req.body;
-    fakeUsers.push({name, email});
-    res.json({
-        message: "Usuario cadastrado com sucesso!"
-    });
+    const { name, email } = req.body;
+    const id = fakeUsers.length ? fakeUsers[fakeUsers.length - 1].id + 1 : 1;
+    const newUser = { id, name, email };
+    fakeUsers.push(newUser);
+    return res.status(201).json(newUser);
 }
 
 module.exports = {
     ListUser,
     CreateUser
-}
+};
