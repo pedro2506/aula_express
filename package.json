@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test-api": "node scripts/test-users.js",
+    "test": "npm run test-api"
   },
   "dependencies": {
     "express": "^4.19.2"
