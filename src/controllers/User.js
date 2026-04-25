@@ -3,44 +3,69 @@ let users = [
 ];
 
 const ListUser = (req, res) => {
-  return res.json(users);
-};
+  const { id } = req.params;
 
-const CreateUser = (req, res) => {
-  const { id, name, email } = req.body;
-
-  if (typeof id !== "number") {
-    return res.status(400).json({ error: "ID precisa ser numérico" });
+  if (!id) {
+    const lastId = users.length > 0 ? users[users.length - 1].id : 0;
+    const nextId = lastId + 1;
+    users.push({ id: nextId, name: `Usuario ${nextId}`, email: `usuario${nextId}@mail.com` });
+    return res.json(users);
   }
 
-  users.push({ id, name, email });
-
-  return res.status(201).json(users);
-};
-
-const UpdateUser = (req, res) => {
-  const id = Number(req.params.id);
-
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "ID precisa ser numérico" });
-  }
-
-  const user = users.find(u => u.id === id);
+  const numericId = Number(id);
+  const user = users.find(u => u.id === numericId);
 
   if (!user) {
     return res.status(404).json({ error: "Usuário não encontrado" });
   }
 
-  // Atualiza só os campos enviados
-  Object.keys(req.body).forEach(key => {
-    user[key] = req.body[key];
-  });
-
   return res.json(user);
 };
 
-module.exports = {
-  ListUser,
-  CreateUser,
-  UpdateUser
+const CreateUser = (req, res) => {
+  const { id, name, email } = req.body;
+  
+  if (typeof id !== "number") {
+    return res.status(400).json({ error: "ID precisa ser numérico" });
+  }
+
+  users.push({ id, name, email });
+  return res.status(201).json({ message: "Usuário criado com sucesso!", users });
 };
+
+const UpdateUser = (req, res) => {
+  const id = Number(req.params.id);
+  const { name, email } = req.body;
+
+  if (isNaN(id)) {
+    return res.status(400).json({ error: "ID precisa ser numérico" });
+  }
+
+  const userExists = users.some(u => u.id === id);
+  if (!userExists) {
+    return res.status(404).json({ error: "Usuário não encontrado" });
+  }
+
+  users.forEach(user => {
+    if (user.id === id) {
+      user.name = name || user.name;
+      user.email = email || user.email;
+    }
+  });
+
+  return res.json({ message: "Usuário atualizado com sucesso!" });
+};
+
+const DeleteUser = (req, res) => {
+  const id = Number(req.params.id);
+  const userIndex = users.findIndex(u => u.id === id);
+
+  if (userIndex === -1) {
+    return res.status(404).json({ error: "Usuário não encontrado" });
+  }
+
+  users.splice(userIndex, 1);
+  return res.json({ message: "Usuário removido com sucesso!", listaAtualizada: users });
+};
+
+module.exports = { ListUser, CreateUser, UpdateUser, DeleteUser };
