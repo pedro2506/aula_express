@@ -23,16 +23,24 @@ const ListUser = (req, res) => {
 };
 
 const CreateUser = (req, res) => {
-  const { id, name, email } = req.body;
-  
-  if (typeof id !== "number") {
-    return res.status(400).json({ error: "ID precisa ser numérico" });
-  }
+  const { name, email } = req.body;
 
-  users.push({ id, name, email });
-  return res.status(201).json({ message: "Usuário criado com sucesso!", users });
+  const lastId = users.length > 0 ? users[users.length - 1].id : 0;
+  const nextId = lastId + 1;
+
+  const newUser = {
+    id: nextId,
+    name,
+    email
+  };
+
+  users.push(newUser);
+
+  return res.status(201).json({
+    message: "Usuário criado com sucesso!",
+    user: newUser
+  });
 };
-
 const UpdateUser = (req, res) => {
   const id = Number(req.params.id);
   const { name, email } = req.body;
