@@ -96,5 +96,5 @@ module.exports = {
   CreateUser,
   UpdateUser,
   DeleteUser,
-  SoftDeleteUser
+  SoftDeleteUser,
 };
