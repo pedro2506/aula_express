@@ -9,8 +9,13 @@ const ListUser = (req, res) => {
   return res.json(activeUsers);
 };
 
+const ListDeletedUsers = (req, res) => {
+  const deletedUsers = users.filter(user => user.is_deleted);
 
-const CreateUser = (req, res) => {
+  return res.json(deletedUsers);
+};
+
+function CreateUser(req, res) {
   const { name, email } = req.body;
 
   const lastId = users.length > 0 ? users[users.length - 1].id : 0;
@@ -28,7 +33,7 @@ const CreateUser = (req, res) => {
     message: "Usuário criado com sucesso!",
     user: newUser
   });
-};
+}
 
 
 const UpdateUser = (req, res) => {
