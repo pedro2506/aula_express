@@ -98,6 +98,7 @@ const SoftDeleteUser = (req, res) => {
 
 module.exports = {
   ListUser,
+  ListDeletedUsers,
   CreateUser,
   UpdateUser,
   DeleteUser,
