@@ -8,6 +8,6 @@ route.get("/users/:id", ListUser);
 route.post("/users", CreateUser);
 route.put("/users/:id", UpdateUser);
 route.delete("/users/:id", DeleteUser);
-router.patch("/users/:id/delete", SoftDeleteUser);
+route.patch("/users/:id/delete", SoftDeleteUser);
 
 module.exports = route;
