@@ -15,6 +15,20 @@ const ListDeletedUsers = (req, res) => {
   return res.json(deletedUsers);
 };
 
+const GetUserById = (req, res) => {
+  const id = Number(req.params.id);
+
+  const user = users.find(u => u.id === id && !u.is_deleted);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "Usuário não encontrado"
+    });
+  }
+
+  return res.json(user);
+};
+
 function CreateUser(req, res) {
   const { name, email } = req.body;
 
@@ -99,6 +113,7 @@ const SoftDeleteUser = (req, res) => {
 module.exports = {
   ListUser,
   ListDeletedUsers,
+  GetUserById,
   CreateUser,
   UpdateUser,
   DeleteUser,
