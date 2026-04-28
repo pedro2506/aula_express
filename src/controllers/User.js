@@ -2,25 +2,13 @@ let users = [
   { id: 1, name: "Joselito", email: "joselito@mail.com" }
 ];
 
+
 const ListUser = (req, res) => {
-  const { id } = req.params;
+  const activeUsers = users.filter(user => !user.is_deleted);
 
-  if (!id) {
-    const lastId = users.length > 0 ? users[users.length - 1].id : 0;
-    const nextId = lastId + 1;
-    users.push({ id: nextId, name: `Usuario ${nextId}`, email: `usuario${nextId}@mail.com` });
-    return res.json(users);
-  }
-
-  const numericId = Number(id);
-  const user = users.find(u => u.id === numericId);
-
-  if (!user) {
-    return res.status(404).json({ error: "Usuário não encontrado" });
-  }
-
-  return res.json(user);
+  return res.json(activeUsers);
 };
+
 
 const CreateUser = (req, res) => {
   const { name, email } = req.body;
@@ -41,28 +29,29 @@ const CreateUser = (req, res) => {
     user: newUser
   });
 };
+
+
 const UpdateUser = (req, res) => {
   const id = Number(req.params.id);
   const { name, email } = req.body;
 
-  if (isNaN(id)) {
-    return res.status(400).json({ error: "ID precisa ser numérico" });
+  const user = users.find(u => u.id === id && !u.is_deleted);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "Usuário não encontrado"
+    });
   }
 
-  const userExists = users.some(u => u.id === id);
-  if (!userExists) {
-    return res.status(404).json({ error: "Usuário não encontrado" });
-  }
+  user.name = name || user.name;
+  user.email = email || user.email;
 
-  users.forEach(user => {
-    if (user.id === id) {
-      user.name = name || user.name;
-      user.email = email || user.email;
-    }
+  return res.json({
+    message: "Usuário atualizado com sucesso!",
+    user
   });
-
-  return res.json({ message: "Usuário atualizado com sucesso!" });
 };
+
 
 const DeleteUser = (req, res) => {
   const id = Number(req.params.id);
@@ -78,9 +67,34 @@ const DeleteUser = (req, res) => {
   users = users.filter(u => u.id !== id);
 
   return res.json({
-    message: "Usuário deletado com sucesso",
-    users
+    message: "Usuário deletado permanentemente"
   });
 };
 
-module.exports = { ListUser, CreateUser, UpdateUser, DeleteUser };
+
+const SoftDeleteUser = (req, res) => {
+  const id = Number(req.params.id);
+
+  const user = users.find(u => u.id === id);
+
+  if (!user) {
+    return res.status(404).json({
+      message: "Usuário não encontrado"
+    });
+  }
+
+  user.is_deleted = true;
+  user.deleted_at = new Date();
+
+  return res.json({
+    message: "Usuário removido logicamente"
+  });
+};
+
+module.exports = {
+  ListUser,
+  CreateUser,
+  UpdateUser,
+  DeleteUser,
+  SoftDeleteUser
+};
