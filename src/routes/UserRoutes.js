@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { ListUser, CreateUser, UpdateUser, DeleteUser } = require("../controllers/User");
+const { ListUser, CreateUser, UpdateUser, DeleteUser, SoftDeleteUser } = require("../controllers/User");
 
 const route = Router();
 
