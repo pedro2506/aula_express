@@ -4,8 +4,8 @@ const { ListUser, ListDeletedUsers, CreateUser, UpdateUser, DeleteUser, SoftDele
 const route = Router();
 
 route.get("/users", ListUser);
-route.get("/users/:id", ListUser);
 route.get("/users/deleted", ListDeletedUsers);
+route.get("/users/:id", ListUser);
 route.post("/users", CreateUser);
 route.put("/users/:id", UpdateUser);
 route.delete("/users/:id", DeleteUser);
